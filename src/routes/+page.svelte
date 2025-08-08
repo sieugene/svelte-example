@@ -1,2 +1,12 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	import TestComponent from '../shared/ui/TestComponent/TestComponent.svelte';
+</script>
+
+<h2>Test</h2>
+<TestComponent />
+
+<style>
+	h2 {
+		color: red;
+	}
+</style>
