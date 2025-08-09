@@ -25,38 +25,57 @@ export class AuthHandler {
 
 	private login(): RequestHandler {
 		return async (event) => {
-			const data = (await event.request.json()) as AuthRequestParams;
-			const validate = this.validateCredentials(data);
-			if (!validate) {
-				const { session } = await this.authController.login(event, data);
-				const response: AuthSuccessResponse = {
-					userId: session.userId
-				};
+			try {
+				const data = (await event.request.json()) as AuthRequestParams;
+				const validate = this.validateCredentials(data);
+				if (!validate) {
+					const { session } = await this.authController.login(event, data);
+					const response: AuthSuccessResponse = {
+						userId: session.userId
+					};
 
-				// redirect
+					return new Response(JSON.stringify(response), {
+						headers: { 'Content-Type': 'application/json' }
+					});
+				}
+				return validate;
+			} catch (error) {
+				const response: AuthErrorResponse = {
+					error: error instanceof Error ? error.message : 'Unknown error'
+				};
 				return new Response(JSON.stringify(response), {
+					status: 400,
 					headers: { 'Content-Type': 'application/json' }
 				});
 			}
-			return validate;
 		};
 	}
 
 	private register(): RequestHandler {
 		return async (event) => {
-			const data = (await event.request.json()) as AuthRequestParams;
-			const validate = this.validateCredentials(data);
-			if (!validate) {
-				const { session } = await this.authController.register(event, data);
-				const response: AuthSuccessResponse = {
-					userId: session.userId
-				};
+			try {
+				const data = (await event.request.json()) as AuthRequestParams;
+				const validate = this.validateCredentials(data);
+				if (!validate) {
+					const { session } = await this.authController.register(event, data);
+					const response: AuthSuccessResponse = {
+						userId: session.userId
+					};
 
+					return new Response(JSON.stringify(response), {
+						headers: { 'Content-Type': 'application/json' }
+					});
+				}
+				return validate;
+			} catch (error: unknown) {
+				const response: AuthErrorResponse = {
+					error: error instanceof Error ? error.message : 'Unknown error'
+				};
 				return new Response(JSON.stringify(response), {
+					status: 400,
 					headers: { 'Content-Type': 'application/json' }
 				});
 			}
-			return validate;
 		};
 	}
 

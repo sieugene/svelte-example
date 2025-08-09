@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { User } from 'entities/user/ui';
 	import type { Auth } from 'features/auth/types';
 
 	// Props
@@ -6,6 +7,6 @@
 </script>
 
 <div>
-	<h2>User page!?</h2>
-	{user.username}
+	<h2>User page</h2>
+	<User {user} />
 </div>

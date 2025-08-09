@@ -1,5 +1,9 @@
 import { AUTH_API_ROUTING } from 'features/auth/config/auth-api-routing';
-import type { AuthRequestParams, AuthResponse } from 'features/auth/server/api/auth.handler';
+import type {
+	AuthErrorResponse,
+	AuthRequestParams,
+	AuthResponse
+} from 'features/auth/server/api/auth.handler';
 
 class AuthApi {
 	apiUrl: string;
@@ -24,10 +28,17 @@ class AuthApi {
 		});
 		const json = (await response.json()) as AuthResponse;
 
-		if (json.error) {
-			throw new Error(json.error || 'Login failed');
+		if ((json as AuthErrorResponse).error) {
+			throw new Error((json as AuthErrorResponse).error || 'Login failed');
 		}
 		return json;
+	}
+
+	async logout() {
+		return fetch(`${this.apiUrl}/${AUTH_API_ROUTING.LOGOUT}`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' }
+		});
 	}
 }
 
